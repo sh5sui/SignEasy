@@ -21,7 +21,7 @@ class Continue(discord.ui.View):
         
         await interaction.message.delete()
         
-        embed = discord.Embed(title="EasySign setup", color=discord.Color.dark_blue())
+        embed = discord.Embed(title="SignEasy setup", color=discord.Color.dark_blue())
         embed.add_field(name="Manager Role", value="Mention your manager role")
 
         await interaction.response.send_message(embed=embed)
@@ -58,7 +58,7 @@ class Continue(discord.ui.View):
         if todel:
             await interaction.channel.delete_messages(todel)
 
-        embed = discord.Embed(title="EasySign setup", color=discord.Color.dark_blue())
+        embed = discord.Embed(title="SignEasy setup", color=discord.Color.dark_blue())
         embed.add_field(name="Assistant Manager Role", value="Mention your assistant manager role")
 
         await interaction.followup.send(embed=embed)
@@ -89,10 +89,10 @@ class Continue(discord.ui.View):
         if dele:
             await interaction.channel.delete_messages(dele)
 
-        embedchan = discord.Embed(title="EasySign setup", color=discord.Color.dark_blue())
+        embedchan = discord.Embed(title="SignEasy setup", color=discord.Color.dark_blue())
         embedchan.add_field(name="Signing channel", value="Mention your signing channel")
 
-        embedrel = discord.Embed(title="EasySign setup", color=discord.Color.dark_blue())
+        embedrel = discord.Embed(title="SignEasy setup", color=discord.Color.dark_blue())
         embedrel.add_field(name="Release channel", value="Mention your Release channel")
 
         await interaction.followup.send(embed=embedchan)
@@ -214,8 +214,8 @@ class Setup(commands.Cog):
             await interaction.response.send_message("You cannot run this command as your not an administrator in this server", ephemeral=True)
             return
         
-        embed = discord.Embed(title="EasySign setup", color=discord.Color.dark_blue())
-        embed.add_field(name="Welcome", value="Welcome to the EasySign setup for your league")
+        embed = discord.Embed(title="SignEasy setup", color=discord.Color.dark_blue())
+        embed.add_field(name="Welcome", value="Welcome to the SignEasy setup for your league")
         embed.add_field(name="Information", value="Before you start, please ensure you have a signing channel, manager role and assistant manager role. Also it is optional to have a releases channel but it is not required as you can just use your signing channel again.", inline=False)
         embed.set_footer(text="Press the button to continue")
 
