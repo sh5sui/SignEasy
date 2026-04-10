@@ -17,34 +17,38 @@ async def on_ready():
     conn = sqlite3.connect("SignEasy.db")
     cursor = conn.cursor()
 
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS guild_config (
-        guildid INTEGER PRIMARY KEY,
-        signingchannelid INTEGER,
-        releaseschannelid INTEGER,
-        managerroleid INTEGER,
-        assistantroleid INTEGER,
-        resultschannel INTEGER,
-        setupcomplete BOOLEAN DEFAULT 0
+    cursor.execute (
+        """
+        CREATE TABLE IF NOT EXISTS guild_config (
+            guildid INTEGER PRIMARY KEY,
+            signingchannelid INTEGER,
+            releaseschannelid INTEGER,
+            managerroleid INTEGER,
+            assistantroleid INTEGER,
+            resultschannel INTEGER,
+            setupcomplete BOOLEAN DEFAULT 0
+        )
+        """
+    ) 
+    
+    cursor.execute (
+        """
+        CREATE TABLE IF NOT EXISTS signings (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            guildid INTEGER NOT NULL,
+            userid INTEGER,
+            teamid INTEGER,
+            signed BOOLEAN DEFAULT 0,
+            manager BOOLEAN DEFAULT 0,
+            assistant BOOLEAN DEFAULT 0,
+            teamcap INTEGER DEFAULT 16,
+            FOREIGN KEY (guildid) REFERENCES guild_config(guildid)
+        )
+        """
     )
-    """)
-
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS signings (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        guildid INTEGER NOT NULL,
-        userid INTEGER,
-        teamid INTEGER,
-        signed BOOLEAN DEFAULT 0,
-        manager BOOLEAN DEFAULT 0,
-        assistant BOOLEAN DEFAULT 0,
-        teamcap INTEGER DEFAULT 16,
-        FOREIGN KEY (guildid) REFERENCES guild_config(guildid)
-    )
-    """)
-
-    conn.commit()
-    conn.close()
+    
+    conn.commit ()
+    conn.close ()
 
 async def load():
     for filename in os.listdir("./cogs"):

@@ -35,7 +35,7 @@ class ContractView(discord.ui.View):
         if signingid is None:
             return
 
-        signingchannel = await interaction.guild.fetch_channel(signingid[0])  # index the tuple
+        signingchannel = await interaction.guild.fetch_channel(signingid[0])
 
         acceptembed = discord.Embed(color=self.teamrole.color)
         acceptembed.set_author(name=interaction.guild.name, icon_url=interaction.guild.icon.url if interaction.guild.icon else None)
@@ -67,28 +67,36 @@ class Contract(commands.Cog):
         with sqlite3.connect("SignEasy.db") as conn:
             cursor = conn.cursor()
 
-            cursor.execute("SELECT setupcomplete FROM guild_config WHERE guildid = ?", (interaction.guild.id,))
-            row = cursor.fetchone()
+            cursor.execute (
+                "SELECT setupcomplete FROM guild_config WHERE guildid = ?",
+                (interaction.guild.id,)
+            ) 
+            row = cursor.fetchone ()
             if row is None or row[0] == 0:
                 await interaction.response.send_message("Setup is not complete, please ask an admin to run /setup", ephemeral=True)
                 return
 
-            cursor.execute("SELECT manager, assistant FROM signings WHERE guildid = ? AND userid = ?",
-                           (interaction.guild.id, interaction.user.id))
+            cursor.execute (
+                "SELECT manager, assistant FROM signings WHERE guildid = ? AND userid = ?",
+                (interaction.guild.id, interaction.user.id)
+            )
             check = cursor.fetchone()
             if check is None or (check[0] == 0 and check[1] == 0):
                 await interaction.response.send_message("You aren't assigned as a manager or assistant and cannot run this command", ephemeral=True)
                 return
-
-            cursor.execute("SELECT signed FROM signings WHERE guildid = ? AND userid = ?",
-                           (interaction.guild.id, player.id))
-            signed = cursor.fetchone()
+            cursor.execute (
+                "SELECT signed FROM signings WHERE guildid = ? AND userid = ?",
+                (interaction.guild.id, player.id)
+            ) 
+            signed = cursor.fetchone ()
             if signed and signed[0] == 1:
                 await interaction.response.send_message("That player is already signed", ephemeral=True)
                 return
 
-            cursor.execute("SELECT teamid FROM signings WHERE guildid = ? AND userid = ?",
-                           (interaction.guild.id, interaction.user.id))
+            cursor.execute (
+                "SELECT teamid FROM signings WHERE guildid = ? AND userid = ?",
+                (interaction.guild.id, interaction.user.id)
+            )
             role = cursor.fetchone()
             if role is None:
                 await interaction.response.send_message("An error occurred: your team role cannot be found", ephemeral=True)
