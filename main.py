@@ -24,6 +24,7 @@ async def on_ready():
         releaseschannelid INTEGER,
         managerroleid INTEGER,
         assistantroleid INTEGER,
+        resultschannel INTEGER,
         setupcomplete BOOLEAN DEFAULT 0
     )
     """)
