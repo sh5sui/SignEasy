@@ -51,6 +51,8 @@ class Motm(commands.Cog):
             pass
         
         await resultschannel.send(embed=embed)
+        
+        conn.close()
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Motm(bot))

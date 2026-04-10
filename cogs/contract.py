@@ -33,6 +33,7 @@ class ContractView(discord.ui.View):
             conn.commit()
 
         if signingid is None:
+            conn.close()
             return
 
         signingchannel = await interaction.guild.fetch_channel(signingid[0])
@@ -56,7 +57,6 @@ class ContractView(discord.ui.View):
 
         await interaction.message.edit(content=None, embed=embed, view=None)
 
-
 class Contract(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
@@ -74,6 +74,7 @@ class Contract(commands.Cog):
             row = cursor.fetchone ()
             if row is None or row[0] == 0:
                 await interaction.response.send_message("Setup is not complete, please ask an admin to run /setup", ephemeral=True)
+                conn.close()
                 return
 
             cursor.execute (
@@ -83,6 +84,7 @@ class Contract(commands.Cog):
             check = cursor.fetchone()
             if check is None or (check[0] == 0 and check[1] == 0):
                 await interaction.response.send_message("You aren't assigned as a manager or assistant and cannot run this command", ephemeral=True)
+                conn.close()
                 return
             cursor.execute (
                 "SELECT signed FROM signings WHERE guildid = ? AND userid = ?",
@@ -91,6 +93,7 @@ class Contract(commands.Cog):
             signed = cursor.fetchone ()
             if signed and signed[0] == 1:
                 await interaction.response.send_message("That player is already signed", ephemeral=True)
+                conn.close()
                 return
 
             cursor.execute (
@@ -100,11 +103,13 @@ class Contract(commands.Cog):
             role = cursor.fetchone()
             if role is None:
                 await interaction.response.send_message("An error occurred: your team role cannot be found", ephemeral=True)
+                conn.close()
                 return
 
         teamrole = interaction.guild.get_role(role[0])
         if teamrole is None:
             await interaction.response.send_message("An error occurred: team role no longer exists", ephemeral=True)
+            conn.close()
             return
 
         teamroleicon = teamrole.icon.url if teamrole.icon else None
@@ -118,6 +123,7 @@ class Contract(commands.Cog):
         await player.send(embed=embed, view=ContractView(teamrole, teamroleicon, interaction.user))
         await interaction.response.send_message(f"Offer sent to {player.mention}", ephemeral=True)
 
+        conn.close()
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Contract(bot))
