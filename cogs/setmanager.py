@@ -39,6 +39,7 @@ class SetManager(commands.Cog):
 
         if row and (row[0] == 1 or row[1] == 1):
             await interaction.response.send_message(f"{member.mention} is already assigned as the manager or assistant manager of another team")
+            conn.close()
             return
         
         cursor.execute(

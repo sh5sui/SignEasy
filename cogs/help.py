@@ -21,6 +21,7 @@ class Help(commands.Cog):
         embed.add_field(name="/sack", value="Remove a manager or assistant manager from his position", inline=False)
         embed.add_field(name="/viewsquadsheet", value="View the squadsheet of a team", inline=False)
         embed.add_field(name="/motm", value="Send the man of the match and mentions in the results channel", inline=False)
+        embed.add_field(name="/sanction", value="Sanction a user in the sanctions channel", inline=False)
         embed.add_field(name="/ping", value="Display the bots latency", inline=False)
         embed.timestamp = discord.utils.utcnow()
         

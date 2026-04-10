@@ -169,6 +169,24 @@ class Continue(discord.ui.View):
             await interaction.followup.send("Setup command failed as you didn't mention a valid channel, please retry")
             return
         
+        sanc = discord.Embed(color=discord.Color.dark_blue())
+        sanc.add_field(name="Sanction channel", value="Mention your sanctions channel")
+        
+        await interaction.followup.send(embed=sanc)
+        
+        try:
+            sanct = await interaction.client.wait_for("message", timeout=60, check=check)
+        except:
+            await interaction.followup.send(f"Setup command timed out")
+            return
+        
+        if sanct.channel_mentions:
+            sanctionchannel = sanct.channel_mentions[0]
+            await interaction.followup.send(f"Set sanction channel to {sanctionchannel.mention}")
+        else:
+            await interaction.followup.send("Setup command failed as you didn't mention a valid channel, please retry")
+            return
+        
         await asyncio.sleep(3)
 
         await rel.delete()
@@ -184,8 +202,8 @@ class Continue(discord.ui.View):
 
         cursor.execute("""
             INSERT OR REPLACE INTO guild_config
-            (guildid, signingchannelid, releaseschannelid, managerroleid, assistantroleid, setupcomplete, resultschannel)
-            VALUES (?, ?, ?, ?, ?, ?)
+            (guildid, signingchannelid, releaseschannelid, managerroleid, assistantroleid, setupcomplete, resultschannel, sanctionchannel)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 interaction.guild.id,
@@ -194,7 +212,8 @@ class Continue(discord.ui.View):
                 role.id,
                 assistantrole.id,
                 1,
-                resultchannel.id
+                resultchannel.id,
+                sanctionchannel.id
             )
         )
 

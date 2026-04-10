@@ -111,6 +111,14 @@ class Contract(commands.Cog):
             await interaction.response.send_message("An error occurred: team role no longer exists", ephemeral=True)
             conn.close()
             return
+        
+        cursor.execute("SELECT teamcp FROM signings WHERE guildid = ?",
+                        (interaction.guild.id))
+        cap = cursor.fetchone()
+        if cap[0] == int(teamrole.members):
+            await interaction.response.send_message(f"Your team is at the max roster cap which is {cap}", ephemeral=True)
+            conn.close()
+            return
 
         teamroleicon = teamrole.icon.url if teamrole.icon else None
 

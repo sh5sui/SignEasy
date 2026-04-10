@@ -77,6 +77,8 @@ class Release(commands.Cog):
         
         await signingchannel.send(embed=embed)
         
+        await player.remove_roles(teamrole)
+        
         conn.close()
         
 async def setup(bot: commands.Bot):

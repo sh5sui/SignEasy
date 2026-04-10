@@ -26,10 +26,11 @@ async def on_ready():
             managerroleid INTEGER,
             assistantroleid INTEGER,
             resultschannel INTEGER,
+            sanctionchannel INTEGER,
             setupcomplete BOOLEAN DEFAULT 0
         )
         """
-    ) 
+    )
     
     cursor.execute (
         """
