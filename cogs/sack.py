@@ -10,6 +10,10 @@ class Sack(commands.Cog):
 
     @app_commands.command(name="sack", description="Remove someone as manager or assistant manager of a team")
     async def Sack(self, interaction: discord.Interaction, member: discord.Member):
+        
+        if not interaction.user.guild_permissions.administrator:
+            interaction.response.send_message("Only admins can sack managers", ephemeral=True)
+            return
 
         conn = sqlite3.connect("SignEasy.db")
         cursor = conn.cursor()

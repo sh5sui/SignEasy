@@ -10,6 +10,10 @@ class SetManager(commands.Cog):
 
     @app_commands.command(name="setmanager", description="Assign someone as the manager of a team")
     async def SetManager(self, interaction: discord.Interaction, member: discord.Member, team: discord.Role):
+        
+        if not interaction.user.guild_permissions.administrator:
+            interaction.response.send_message("Only admins can add managers", ephemeral=True)
+            return
 
         conn = sqlite3.connect("SignEasy.db")
         cursor = conn.cursor()

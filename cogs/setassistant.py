@@ -10,6 +10,10 @@ class SetAssistant(commands.Cog):
 
     @app_commands.command(name="setassistant", description="Assign someone as the assistant manager of a team")
     async def SetAssistant(self, interaction: discord.Interaction, member: discord.Member, team: discord.Role):
+        
+        if not interaction.user.guild_permissions.administrator:
+            interaction.response.send_message("Only admins can add assistant managers", ephemeral=True)
+            return
 
         conn = sqlite3.connect("SignEasy.db")
         cursor = conn.cursor()
