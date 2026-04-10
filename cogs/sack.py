@@ -21,6 +21,21 @@ class Sack(commands.Cog):
             await interaction.response.send_message("You haven't completed the setup so your unable to use this command, please get an admin to do /setup to unlock all features of the bot")
             conn.close()
             return
+        
+        cursor.execute("SELECT manager, assistant FROM signings WHERE guildid = ? AND userid = ?",
+                       (interaction.guild.id, member.id))
+        row = cursor.fetchone()
+
+        if row and (row[0] == 1 or row[1] == 1):
+            cursor.execute("UPDATE signings SET teamid = NULL, signed = 0, manager = 0, assistant = 0 WHERE guildid = ? AND userid = ?",
+                           (interaction.guild.id, member.id))
+            conn.commit()
+            conn.close()
+            await interaction.response.send_message(f"Successfully removed {member.mention} as manager or assistant of any team")
+        else:
+            await interaction.response.send_message(f"{member.mention} is not a manager or assistant of any team")
+            conn.close()
+            return
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Sack(bot))
