@@ -47,8 +47,8 @@ async def on_ready():
         """
     )
     
-    conn.commit ()
-    conn.close ()
+    conn.commit()
+    conn.close()
 
 async def load():
     for filename in os.listdir("./cogs"):
@@ -59,6 +59,26 @@ async def load():
 async def setup_hook():
     await load()
     await bot.tree.sync()
+    
+@bot.event
+async def on_message_delete(message):
+    
+    if message.author.bot:
+        return
+    
+    if message.raw_mentions:
+        
+        gping = bot.get_emoji(1492216605365502205)
+        
+        musers = ", ".join(user.mention for user in message.mentions)
+        
+        embed = discord.Embed(title=f"{gping} Ghost ping detected", color=discord.Color.dark_blue())
+        embed.timestamp = discord.utils.utcnow()
+        embed.add_field(name="Author", value=message.author.mention, inline=False)
+        embed.add_field(name="Mentions", value=musers, inline=False)
+        embed.add_field(name="Content", value=message.content or "Unable to fetch content", inline=False)
+        
+        await message.channel.send(embed=embed)
 
 token = os.getenv("token")
 bot.run(token)

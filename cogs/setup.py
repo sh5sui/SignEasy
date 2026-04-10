@@ -150,10 +150,41 @@ class Continue(discord.ui.View):
 
         if delete:
             await interaction.channel.delete_messages(delete)
+            
+        embedres = discord.Embed(color=discord.Color.dark_blue())
+        embedres.add_field(name="Results channel", value="Mention your results channel")
+        
+        await interaction.followup.send(embed=embedres)
+        
+        try:
+            res = await interaction.client.wait_for("message", timeout=60, check=check)
+        except:
+            await interaction.followup.send(f"Setup command timed out")
+            return
+        
+        if res.channel_mentions:
+            resultchannel = res.channel_mentions[0]
+            await interaction.followup.send(f"Set results channel to {resultchannel.mention}")
+        else:
+            await interaction.followup.send("Setup command failed as you didn't mention a valid channel, please retry")
+            return
+        
+        await asyncio.sleep(3)
+
+        await rel.delete()
+
+        deleted = []
+
+        async for message in interaction.channel.history(limit=100):
+            if message.author == interaction.client.user:
+                deleted.append(message)
+
+        if deleted:
+            await interaction.channel.delete_messages(deleted)
 
         cursor.execute("""
             INSERT OR REPLACE INTO guild_config
-            (guildid, signingchannelid, releaseschannelid, managerroleid, assistantroleid, setupcomplete)
+            (guildid, signingchannelid, releaseschannelid, managerroleid, assistantroleid, setupcomplete, resultschannel)
             VALUES (?, ?, ?, ?, ?, ?)
             """,
             (
@@ -162,12 +193,15 @@ class Continue(discord.ui.View):
                 releasechannel.id,
                 role.id,
                 assistantrole.id,
-                1
+                1,
+                resultchannel.id
             )
         )
 
         conn.commit()
         conn.close()
+        
+        await interaction.followup.send("Setup completed! thank you")
         
 class Setup(commands.Cog):
     def __init__(self, bot: commands.Bot):
