@@ -37,6 +37,7 @@ async def on_ready():
         signed BOOLEAN DEFAULT 0,
         manager BOOLEAN DEFAULT 0,
         assistant BOOLEAN DEFAULT 0,
+        teamcap INTEGER DEFAULT 16,
         FOREIGN KEY (guildid) REFERENCES guild_config(guildid)
     )
     """)
