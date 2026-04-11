@@ -56,7 +56,9 @@ class Sanction(commands.Cog):
         
         sanctionchannel = interaction.guild.get_channel(row[0])
         
-        await sanctionchannel.send(embed=embed)
+        aaaa = await sanctionchannel.send(embed=embed)
+        
+        await interaction.response.send_message(f"{user.mention} has been sanctioned {aaaa.jump_url}", ephemeral=True)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Sanction(bot))

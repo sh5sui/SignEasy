@@ -50,7 +50,9 @@ class Motm(commands.Cog):
         else:
             pass
         
-        await resultschannel.send(embed=embed)
+        aaaa = await resultschannel.send(embed=embed)
+        
+        await interaction.response.send_message(f"MOTM sent {aaaa.jump_url}")
         
         conn.close()
 

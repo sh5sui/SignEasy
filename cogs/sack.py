@@ -40,6 +40,8 @@ class Sack(commands.Cog):
             await interaction.response.send_message(f"{member.mention} is not a manager or assistant of any team")
             conn.close()
             return
+        
+        await interaction.response.send_message(f"{member.mention} has been sacked")
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(Sack(bot))

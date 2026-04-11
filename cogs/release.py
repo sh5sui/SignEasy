@@ -75,9 +75,11 @@ class Release(commands.Cog):
         embed.add_field(name="Team Release", value=f"{player.mention} has been released by {self.teamrole.mention}", inline=False)
         embed.add_field(name="", value=f"> • Manager - {interaction.user.mention} {interaction.user.name}", inline=False)
         
-        await signingchannel.send(embed=embed)
+        aaaa = await signingchannel.send(embed=embed)
         
         await player.remove_roles(teamrole)
+        
+        await interaction.response.send_message(f"{player.mention} was released from {teamrole.mention} {aaaa.jump_url}", ephemeral=True)
         
         conn.close()
         
