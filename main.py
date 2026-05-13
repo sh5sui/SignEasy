@@ -9,7 +9,7 @@ load_dotenv()
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-bot = commands.Bot(command_prefix=";", intents=discord.Intents.all())
+bot = commands.Bot(command_prefix=";", intents=discord.Intents.all(), help_command=None)
 
 @bot.event
 async def on_ready():
@@ -27,6 +27,7 @@ async def on_ready():
             assistantroleid INTEGER,
             resultschannel INTEGER,
             sanctionchannel INTEGER,
+            scoutingchannelid INTEGER,
             setupcomplete BOOLEAN DEFAULT 0
         )
         """
