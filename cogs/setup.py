@@ -189,7 +189,7 @@ class Continue(discord.ui.View):
         
         await asyncio.sleep(3)
 
-        await rel.delete()
+        await sanct.delete()
 
         deleted = []
 
@@ -203,7 +203,7 @@ class Continue(discord.ui.View):
         cursor.execute("""
             INSERT OR REPLACE INTO guild_config
             (guildid, signingchannelid, releaseschannelid, managerroleid, assistantroleid, setupcomplete, resultschannel, sanctionchannel)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 interaction.guild.id,
@@ -218,9 +218,10 @@ class Continue(discord.ui.View):
         )
 
         conn.commit()
-        conn.close()
         
         await interaction.followup.send("Setup completed! thank you")
+        
+        conn.close()
         
 class Setup(commands.Cog):
     def __init__(self, bot: commands.Bot):
